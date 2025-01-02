@@ -16,13 +16,15 @@ type ProjectProps = {
   };
 };
 
-export async function generateMetadata({ params }: ProjectProps) {
-  const slug = params.projectSlug;
+export async function generateMetadata({
+  params,
+}: ProjectProps): Promise<Metadata> {
+  const { projectSlug } = await params;
+  const slug = projectSlug;
   const content = await fs.readFile(
     path.join(process.cwd(), "src/content/blog", `${slug}.mdx`),
     "utf-8"
   );
-  // console.log(content);
   const { frontmatter } = await compileMDX<blogData>({
     source: content,
     options: {
@@ -35,8 +37,28 @@ export async function generateMetadata({ params }: ProjectProps) {
   };
 }
 
+// const components = {
+//   h1: ({ className, ...props }) => (
+//     <h1
+//       className={cn(
+//         "mt-2 scroll-m-20 text-4xl font-bold tracking-tight",
+//         className
+//       )}
+//       {...props}
+//     />
+//   ),
+//   h2: ({ className, ...props }) => (
+//     <h2
+//       className={cn(
+//         "mt-10 scroll-m-20 border-b pb-1 text-3xl font-semibold tracking-tight first:mt-0",
+//         className
+//       )}
+//       {...props}
+//     />
+//   ),}
 export default async function Project({ params }: ProjectProps) {
-  const slug = params.projectSlug;
+  const { projectSlug } = await params;
+  const slug = projectSlug;
   const content = await fs.readFile(
     path.join(process.cwd(), "src/content/blog", `${slug}.mdx`),
     "utf-8"
@@ -55,7 +77,7 @@ export default async function Project({ params }: ProjectProps) {
 
   return (
     <>
-      <article className="prose lg:prose-xl max-w-3xl mx-auto">
+      <article className="prose lg:prose-xl max-w-3xl mx-auto prose-h1:mt-2 prose-h1:text-blue-500 prose-h1:scroll-m-20 prose-h1:text-4xl prose-h1:font-bold prose-h1:tracking-tight prose-p:leading-7 prose-p:[&:not(:first-child)]:mt-6 prose-blockquote:mt-6 prose-blockquote:border-l-2 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-500">
         {/* <MDXRemote
           source={content}
           components={{
